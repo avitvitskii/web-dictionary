@@ -12,6 +12,5 @@ services:
     ports:
     - 8080:80
 ```
-* Copy `docker/db/.env-example` to `docker/db/.env` and setup your MySQL environment variables
 * Run: `docker-compose build`
 * Run: `docker-compose up -d`
