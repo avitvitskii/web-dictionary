@@ -1,0 +1,3 @@
+[submodule "app/library"]
+	path = app/library
+	url = https://gitlab.com/iotwatcher/library.git

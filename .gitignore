@@ -1,0 +1,6 @@
+.idea
+cache/
+db/storage
+docker/db/.env
+docker-compose.override.yml
+public/src/assets/lib

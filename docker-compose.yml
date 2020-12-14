@@ -1,0 +1,42 @@
+version: "3.3"
+
+services:
+
+  # Frontend of web server
+  web:
+    image: nginx:1.15
+    volumes:
+      - ./:/var/www/app/
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+
+  # Backend of web server
+  phalcon:
+    build:
+      context: ./docker/phalcon
+    expose:
+      - 9000
+      - 9001
+    volumes:
+      - ./:/var/www/app/
+      - ./docker/phalcon/phalcon.ini:/usr/local/etc/php/conf.d/30-phalcon.ini
+    restart: always
+
+  # Database
+  db:
+    image: mysql:5.7
+    env_file:
+    - ./docker/db/.env
+    ports:
+    - 127.0.0.1:3314:3306
+    volumes:
+    - ./db/storage:/var/lib/mysql
+    - ./db/initial:/docker-entrypoint-initdb.d
+    - ./db/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
+    restart: always
+
+  dictionary:
+    image: brendanburns/dictionary-server
+    ports:
+    - 8080:8080

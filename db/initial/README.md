@@ -1,0 +1,1 @@
+Place `.sql` files to the `db/initial` dir to load them to MySQL image on first build. 
