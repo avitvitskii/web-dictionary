@@ -32,11 +32,11 @@ services:
     - 127.0.0.1:3314:3306
     volumes:
     - ./db/storage:/var/lib/mysql
-    - ./db/initial:/docker-entrypoint-initdb.d
+    - ./db/initial/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     - ./db/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     restart: always
 
   dictionary:
     image: brendanburns/dictionary-server
-    ports:
-    - 8080:8080
+    expose:
+      - 8080
