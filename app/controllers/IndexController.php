@@ -5,7 +5,21 @@ class IndexController extends ControllerBase
 {
     public function indexAction(string $word = "")
     {
+        if ($this->request->isPost() && !!$this->request->getPost('search')) {
+            $word = $this->request->getPost('word');
+            $this->response->redirect("/$word");
+        }
+        if ($this->request->isPost() && !!$this->request->getPost('add')) {
+            $word = $this->request->getPost('word');
+            $description = $this->request->getPost('description');
+            $model = new Words();
+            $model->setWord($word);
+            $model->setDescription($description);
+            $model->save();
+            $this->response->redirect("/$word");
+        }
         if ($word === "") {
+            $this->view->pick('index/index');
             return;
         }
         $ch = curl_init();
@@ -13,8 +27,8 @@ class IndexController extends ControllerBase
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($ch);
         curl_close($ch);
+        $this->view->word = $word;
         if ($output === strtoupper($word) . " was not found") {
-            $model = new Words();
             $saved_word = Words::findFirst(
                 [
                     'conditions' => 'word = :word:',
@@ -24,15 +38,13 @@ class IndexController extends ControllerBase
                 ]
             );
             if (!$saved_word) {
-                $model->setWord($word);
-                $model->setDescription("testtttt");
-                $model->save();
-            } else {
-                $output = $saved_word->description;
+                $this->view->output = $output;
+                $this->view->pick('index/add_word');
+                return;
             }
+            $output = $saved_word->description;
         }
         $this->view->output = $output;
-        $this->view->word = $word;
     }
 }
 

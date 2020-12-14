@@ -1,1 +1,12 @@
-
+<div class="page-header">
+    <h1>Hello! This is web dictionary. Type word to find its definition.</h1>
+</div>
+<form id="form" action="/" method="post">
+    <input type="text" name="word">
+    <input type="hidden" name="search" value="true">
+    <input type="submit" value="Search">
+</form>
+<div class="page-header">
+    <h1><?= $word; ?></h1>
+    <p><?= $output ?></p>
+</div>
